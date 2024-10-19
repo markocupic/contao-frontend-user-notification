@@ -100,7 +100,7 @@
 
                             tagAsRead: async function readIt(id) {
                                 const response = await fetch(`_frontend_user_notification/tag_as_read/${id}`);
-                                this.loadItems(true);
+                                await this.loadItems(true);
                             }
                         }
                     });
