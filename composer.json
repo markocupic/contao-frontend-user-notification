@@ -1,0 +1,52 @@
+{
+    "name": "markocupic/contao-frontend-user-notification",
+    "description": "Display notifications to logged in frontend users",
+    "keywords": [
+        "contao",
+        "notifications",
+        "frontend",
+        "Bootstrap toasts"
+    ],
+    "type": "contao-bundle",
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Marko Cupic",
+            "email": "m.cupic@gmx.ch",
+            "homepage": "https://github.com/markocupic/contao-frontend-user-notification",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/markocupic/contao-frontend-user-notification/issues",
+        "source": "https://github.com/markocupic/contao-frontend-user-notification"
+    },
+    "require": {
+        "php": "^8.2",
+        "contao/core-bundle": "^5.3",
+        "markocupic/contao-component-vue-js": "^3.3",
+        "ramsey/uuid": "^3.0 || ^4.0"
+    },
+    "require-dev": {
+        "contao/manager-plugin": "^2.12"
+    },
+    "autoload": {
+        "psr-4": {
+            "Markocupic\\ContaoFrontendUserNotification\\": "src/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "contao-components/installer": false,
+            "contao/manager-plugin": false,
+            "contao-community-alliance/composer-plugin": true
+        }
+    },
+    "extra": {
+        "contao-manager-plugin": "Markocupic\\ContaoFrontendUserNotification\\ContaoManager\\Plugin"
+    },
+    "scripts": {
+        "cs-fixer": "@php tools/ecs/vendor/bin/ecs check config/ contao/ src/ templates/ tests/ --config tools/ecs/config.php --fix --ansi",
+        "unit-tests": "@php tools/phpunit/vendor/bin/phpunit -c tools/phpunit/phpunit.xml.dist"
+    }
+}

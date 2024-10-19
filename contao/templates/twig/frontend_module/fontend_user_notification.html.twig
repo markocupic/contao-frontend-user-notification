@@ -1,0 +1,120 @@
+{% extends "@Contao/frontend_module/_base.html.twig" %}
+
+{% block content %}
+    <div id="frontend-user-notification-list_{{ id }}">
+        <div class="toast-container position-fixed top-0 start-0 p-3">
+            <div v-for="item in items" v-bind-data-id="item.id" class="toast" role="alert" data-bs-autohide="false" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header bg-white">
+                    <span class="me-auto text-danger small">
+                        <i class="fa-solid fa-circle-info"></i> <strong><span v-html="item.messageTitle ?? ''"></span></strong>
+                    </span>
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button> -->
+                </div>
+                <div class="toast-body bg-light-subtle">
+                    <div class="frontend-user-notification-toast--message-date small text-muted">
+                        [[ item.dateAddedFormattedDatim ]]
+                    </div>
+                    <!--<div class="mb-4 small">Du hast eine neue Nachricht:</div>-->
+                    <div class="frontend-user-notification-toast--message-text" v-html="item.messageText ?? ''">
+                        {# The notification toast come here #}
+                    </div>
+                    <div class="mt-2 pt-2 border-top">
+                        <button v-on:click="tagAsRead(item.id)" type="button" class="btn btn-primary btn-sm" data-bs-dismiss="toast">gelesen</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="{{ app.request.getSchemeAndHttpHost() }}/assets/contao-component-vue-js/vue/dist/vue.global.prod.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            class FrontendUserNotifications {
+                constructor(appSelector, opt) {
+                    // Defaults
+                    const defaults = {
+                        'params': {
+                            //'param': 'foo',
+                        },
+                    };
+
+                    // merge options and defaults
+                    let options = {...defaults, ...opt}
+
+                    const {createApp} = Vue
+
+                    // Instantiate vue.js application
+                    const app = createApp({
+                        data() {
+                            return {
+                                req: 0,
+                                intervalId: null,
+                                items: [],
+                                ids: [],
+                            };
+                        },
+
+                        mounted() {
+                            this.intervalId = window.setInterval(async () => {
+                                this.loadItems();
+                            }, 15000);
+                        },
+
+                        methods: {
+                            loadItems: async function loadItems(force = false) {
+                                const response = await fetch('_frontend_user_notification/get');
+
+                                if (!response.ok) {
+                                    throw new Error(`Response status: ${response.status}`);
+                                }
+
+                                const json = await response.json();
+
+                                // Count requests
+                                if (force === false) {
+                                    this.req++;
+                                }
+
+                                // Do not poll the server for a too long time.
+                                if (force === false && this.req > 15) {
+                                    window.clearInterval(this.intervalId);
+                                }
+
+                                if (json.status === 'success') {
+
+                                    this.items = json.data;
+
+                                    const toasts = document.querySelectorAll(`${appSelector} .toast`);
+
+                                    for (const toast of toasts) {
+                                        // Display the toast
+                                        const toastInstance = new bootstrap.Toast(toast);
+
+                                        if (!toastInstance.isShown()) {
+                                            toastInstance.show();
+                                        }
+                                    }
+                                }
+                            },
+
+                            tagAsRead: async function readIt(id) {
+                                const response = await fetch(`_frontend_user_notification/tag_as_read/${id}`);
+                                this.loadItems(true);
+                            }
+                        }
+                    });
+
+                    app.config.compilerOptions.delimiters = ['[[', ']]'];
+                    app.mount(appSelector);
+                }
+            }
+
+            const userNotificationList = new FrontendUserNotifications('#frontend-user-notification-list_{{ id }}', {});
+
+        });
+    </script>
+
+    <!-- indexer::continue -->
+
+{% endblock %}

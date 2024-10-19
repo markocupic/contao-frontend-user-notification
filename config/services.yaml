@@ -1,0 +1,12 @@
+# config/services.yaml
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+        bind:
+
+    Markocupic\ContaoFrontendUserNotification\:
+        resource: ../src/
+        exclude: ../src/{DependencyInjection,Model,Notification}
+
