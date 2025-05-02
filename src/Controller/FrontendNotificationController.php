@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of Contao Frontend User Notification.
  *
- * (c) Marko Cupic 2024 <m.cupic@gmx.ch>
+ * (c) Marko Cupic 2025 <m.cupic@gmx.ch>
  * @license GPL-3.0-or-later
  * For the full copyright and license information,
  * please view the LICENSE file that was distributed with this source code.
@@ -47,8 +47,8 @@ class FrontendNotificationController extends AbstractController
         }
 
         $rows = $this->connection->fetchAllAssociative(
-            'SELECT * FROM tl_frontend_user_notification WHERE user = ? AND isRead = ? ORDER BY id',
-            [$user->id, 0]
+            'SELECT * FROM tl_frontend_user_notification WHERE user = ? AND isRead = ? AND (endOfLifeTstamp = 0 OR endOfLifeTstamp > ?) ORDER BY id',
+            [$user->id, 0, time()]
         );
 
         if (empty($rows)) {
