@@ -1,6 +1,8 @@
 {% extends "@Contao/frontend_module/_base.html.twig" %}
 
 {% block content %}
+    <!-- indexer::stop -->
+    {# Vue application start #}
     <div id="frontend-user-notification-list_{{ id }}">
         <div class="toast-container position-fixed top-0 start-0 p-3">
             <div v-for="item in items" v-bind-data-id="item.id" class="toast" role="alert" data-bs-autohide="false" aria-live="assertive" aria-atomic="true">
@@ -16,7 +18,7 @@
                     </div>
                     <!--<div class="mb-4 small">Du hast eine neue Nachricht:</div>-->
                     <div class="frontend-user-notification-toast--message-text" v-html="item.messageText ?? ''">
-                        {# The notification toast come here #}
+                        {# The notification toasts come here #}
                     </div>
                     <div class="mt-2 pt-2 border-top">
                         <button v-on:click="tagAsRead(item.id)" type="button" class="btn btn-primary btn-sm" data-bs-dismiss="toast">gelesen</button>
@@ -25,15 +27,15 @@
             </div>
         </div>
     </div>
+    {# Vue application end #}
+    <!-- indexer::continue -->
     <script type="text/javascript" src="{{ app.request.getSchemeAndHttpHost() }}/assets/contao-component-vue-js/vue/dist/vue.global.prod.js"></script>
     {% add to body %}
-        <script src="{{ asset('js/FrontendUserNotification.js','markocupic_contao_frontend_user_notification') }}"></script>
+        <script src="{{ asset('js/FrontendUserNotification.js', 'markocupic_contao_frontend_user_notification') }}"></script>
         <script>
             document.addEventListener('DOMContentLoaded', () => {
                 new FrontendUserNotification('#frontend-user-notification-list_{{ id }}', {});
             });
         </script>
     {% endadd %}
-    <!-- indexer::continue -->
-
 {% endblock %}
