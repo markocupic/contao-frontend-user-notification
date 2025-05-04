@@ -3,7 +3,7 @@
 {% block content %}
     <!-- indexer::stop -->
     {# Vue application start #}
-    <div id="frontend-user-notification-list_{{ id }}">
+    <div id="frontend-user-notification-list_{{ id }}" class="frontend-user-notification-list">
         <div class="toast-container position-fixed top-0 start-0 p-3">
             <div v-for="item in items" v-bind-data-id="item.id" class="toast" role="alert" data-bs-autohide="false" aria-live="assertive" aria-atomic="true">
                 <div class="toast-header bg-white">
@@ -27,15 +27,9 @@
             </div>
         </div>
     </div>
+    {% add to body %}
+        <script src="{{ asset('js/frontend_user_notification.built.js', 'markocupic_contao_frontend_user_notification') }}"></script>
+    {% endadd %}
     {# Vue application end #}
     <!-- indexer::continue -->
-    <script type="text/javascript" src="{{ app.request.getSchemeAndHttpHost() }}/assets/contao-component-vue-js/vue/dist/vue.global.prod.js"></script>
-    {% add to body %}
-        <script src="{{ asset('js/FrontendUserNotification.js', 'markocupic_contao_frontend_user_notification') }}"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                new FrontendUserNotification('#frontend-user-notification-list_{{ id }}', {});
-            });
-        </script>
-    {% endadd %}
 {% endblock %}

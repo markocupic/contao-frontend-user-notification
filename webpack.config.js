@@ -5,13 +5,7 @@ Encore
     .setPublicPath('/bundles/markocupiccontaofrontendusernotification')
     .setManifestKeyPrefix('')
 
-    //.addEntry('backend', './assets/backend.js') // Register Stimulus controllers
-
-    .copyFiles({
-        from: './assets/js',
-        to: 'js/[path][name].[hash:8].[ext]',
-        pattern: /(FrontendUserNotification\.js|)$/,
-    })
+    .addEntry('js/frontend_user_notification.built', './assets/js/frontend_user_notification.built.js')
 
     // Typescripts
     //.addEntry('js/my_typescript', './assets/ts/my_typescript.ts')
@@ -21,6 +15,7 @@ Encore
     .cleanupOutputBeforeBuild()
     .enableSourceMaps()
     .enableVersioning()
+    .enableVueLoader()
 
     // enables @babel/preset-env polyfills
     .configureBabelPresetEnv((config) => {
@@ -29,6 +24,7 @@ Encore
     })
 
     .enablePostCssLoader()
+
 ;
 
-module.exports = Encore.getWebpackConfig();
+module.exports = Encore.getWebpackConfig();;

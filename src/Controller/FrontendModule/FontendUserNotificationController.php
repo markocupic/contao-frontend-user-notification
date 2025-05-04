@@ -22,9 +22,9 @@ use Contao\FrontendUser;
 use Contao\MemberModel;
 use Contao\ModuleModel;
 use Contao\PageModel;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Security;
 
 #[AsFrontendModule(category: 'notification')]
 class FontendUserNotificationController extends AbstractFrontendModuleController

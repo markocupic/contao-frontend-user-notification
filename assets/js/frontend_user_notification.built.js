@@ -1,40 +1,38 @@
-class FrontendUserNotification {
-    constructor(appSelector, opt) {
-        // Defaults
-        const defaults = {
-            'params': {
-                //'param': 'foo',
-            },
-        };
+import {createApp} from 'vue';
+import IdlenessDetector from './modules/idleness_detector.js';
 
-        // merge options and defaults
-        let options = {...defaults, ...opt}
+const modules = document.querySelectorAll('.frontend-user-notification-list');
 
-        const {createApp} = Vue
+for (const module of modules) {
 
-        // Instantiate vue.js application
+    if (document.getElementById(module.getAttribute('id'))) {
+        const appSelector = `#${module.getAttribute('id')}`;
+        const idlenessDetector = new IdlenessDetector(60000);
+        idlenessDetector.start();
+
         const app = createApp({
             data() {
                 return {
-                    req: 0,
                     intervalId: null,
                     items: [],
                     ids: [],
-                };
+                }
             },
-
             mounted() {
-                window.setTimeout(() => {
-                    this.loadItems();
+                window.setTimeout(async () => {
+                    await this.loadItems();
                 }, 1000);
 
                 this.intervalId = window.setInterval(async () => {
-                    this.loadItems();
+                    if (idlenessDetector.isIdle() === false) {
+                        await this.loadItems();
+                    } else {
+                        console.log(`User is idle for ${idlenessDetector.getIdleTime()} ms. Stop loading messages`)
+                    }
                 }, 15000);
             },
-
             methods: {
-                loadItems: async function loadItems(force = false) {
+                loadItems: async function loadItems() {
                     const response = await fetch('_frontend_user_notification/get');
 
                     if (!response.ok) {
@@ -43,22 +41,10 @@ class FrontendUserNotification {
 
                     const json = await response.json();
 
-                    // Count requests
-                    if (force === false) {
-                        this.req++;
-                    }
-
-                    // Do not poll the server for a too long time.
-                    if (force === false && this.req > 15) {
-                        window.clearInterval(this.intervalId);
-                    }
-
                     if (json.status === 'success') {
-
-                        await this.$nextTick();
                         this.items = json.data;
                         await this.$nextTick();
-                        const toasts = document.querySelectorAll(`${appSelector} .toast`);
+                        const toasts = document.querySelectorAll(appSelector + ' .toast');
 
                         for (const toast of toasts) {
                             // Display the toast
@@ -70,14 +56,12 @@ class FrontendUserNotification {
                         }
                     }
                 },
-
                 tagAsRead: async function readIt(id) {
-                    const response = await fetch(`_frontend_user_notification/tag_as_read/${id}`);
-                    await this.loadItems(true);
+                    await fetch(`_frontend_user_notification/tag_as_read/${id}`);
+                    await this.loadItems();
                 }
             }
         });
-
         app.config.compilerOptions.delimiters = ['[[', ']]'];
         app.mount(appSelector);
     }

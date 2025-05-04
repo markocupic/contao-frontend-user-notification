@@ -23,7 +23,7 @@ $messageTitle = 'Happy  Birthday'
 $messageText = 'bla, bla, bla';
 $endOfLifeTimeStamp = time() + 7*24*3600; // 1 week
 
-new Markocupic\ContaoFrontendUserNotification\Notification\DefaultFrontendUserNotification($user, $type, $messageTitle, $messageText, $endOfLifeTimeStamp)
+new Markocupic\ContaoFrontendUserNotification\Notification\DefaultFrontendUserNotification($user, $type, $messageTitle, $messageText, )
 ```
 
 ### Dependencies
