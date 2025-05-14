@@ -39,10 +39,10 @@ class FrontendUserNotificationFetcher extends AbstractExtension
         $t = 'tl_frontend_user_notification';
 
         if ('' !== $type) {
-            $arrColumns = ["$t.user=?", "$t.endOfLifeTstamp<?", "$t.type=?", "$t.isRead=?"];
+            $arrColumns = ["$t.user=?", "$t.endOfLifeTstamp>?", "$t.type=?", "$t.isRead=?"];
             $args = [$user->id, time(), $type, 0];
         } else {
-            $arrColumns = ["$t.user=?", "$t.endOfLifeTstamp<?", "$t.isRead=?"];
+            $arrColumns = ["$t.user=?", "$t.endOfLifeTstamp>?", "$t.isRead=?"];
             $args = [$user->id, time(), 0];
         }
 
@@ -67,10 +67,10 @@ class FrontendUserNotificationFetcher extends AbstractExtension
         $t = 'tl_frontend_user_notification';
 
         if ('' !== $type) {
-            $arrColumns = ["$t.user=?", "$t.endOfLifeTstamp<?", "$t.type=?", "$t.isRead=?"];
+            $arrColumns = ["$t.user=?", "$t.endOfLifeTstamp>?", "$t.type=?", "$t.isRead=?"];
             $args = [$user->id, time(), $type, 0];
         } else {
-            $arrColumns = ["$t.user=?", "$t.endOfLifeTstamp<?", "$t.isRead=?"];
+            $arrColumns = ["$t.user=?", "$t.endOfLifeTstamp>?", "$t.isRead=?"];
             $args = [$user->id, time(), 0];
         }
 
