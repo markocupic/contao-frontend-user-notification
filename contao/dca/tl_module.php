@@ -12,9 +12,9 @@ declare(strict_types=1);
  * @link https://github.com/markocupic/contao-frontend-user-notification
  */
 
-use Markocupic\ContaoFrontendUserNotification\Controller\FrontendModule\FontendUserNotificationController;
+use Markocupic\ContaoFrontendUserNotification\Controller\FrontendModule\FrontendUserNotificationController;
 
 /**
  * Frontend modules
  */
-$GLOBALS['TL_DCA']['tl_module']['palettes'][FontendUserNotificationController::TYPE] = '{title_legend},name,headline,type;{template_legend:hide},customTpl;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID';
+$GLOBALS['TL_DCA']['tl_module']['palettes'][FrontendUserNotificationController::TYPE] = '{title_legend},name,headline,type;{template_legend:hide},customTpl;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID';

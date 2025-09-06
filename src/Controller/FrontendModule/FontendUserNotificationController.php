@@ -27,9 +27,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 #[AsFrontendModule(category: 'notification')]
-class FontendUserNotificationController extends AbstractFrontendModuleController
+class FrontendUserNotificationController extends AbstractFrontendModuleController
 {
-    public const TYPE = 'fontend_user_notification';
+    public const TYPE = 'frontend_user_notification';
 
     protected PageModel|null $page;
 
