@@ -48,7 +48,7 @@ class FrontendNotificationController extends AbstractController
 
         $rows = $this->connection->fetchAllAssociative(
             'SELECT * FROM tl_frontend_user_notification WHERE user = ? AND isRead = ? AND (endOfLifeTstamp = 0 OR endOfLifeTstamp > ?) ORDER BY id',
-            [$user->id, 0, time()]
+            [$user->id, 0, time()],
         );
 
         if (empty($rows)) {
@@ -95,7 +95,7 @@ class FrontendNotificationController extends AbstractController
             return $this->json(['status' => 'not_logged_in']);
         }
 
-        $model = FrontendUserNotificationModel::findByPk($id);
+        $model = FrontendUserNotificationModel::findById($id);
 
         if (null !== $model && !$model->isRead) {
             $model->isRead = true;

@@ -30,9 +30,6 @@ class MarkocupicContaoFrontendUserNotification extends Bundle
         return new MarkocupicContaoFrontendUserNotificationExtension();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function build(ContainerBuilder $container): void
     {
         parent::build($container);

@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of Contao Frontend User Notification.
  *
- * (c) Marko Cupic 2024 <m.cupic@gmx.ch>
+ * (c) Marko Cupic <m.cupic@gmx.ch>
  * @license GPL-3.0-or-later
  * For the full copyright and license information,
  * please view the LICENSE file that was distributed with this source code.
@@ -52,7 +52,7 @@ class FrontendUserNotificationController extends AbstractFrontendModuleControlle
     {
         $user = $this->security->getUser();
         $template->set('id', $model->id);
-        $template->set('user', MemberModel::findByPk($user->id)->row());
+        $template->set('user', MemberModel::findById($user->id)->row());
 
         return $template->getResponse();
     }
