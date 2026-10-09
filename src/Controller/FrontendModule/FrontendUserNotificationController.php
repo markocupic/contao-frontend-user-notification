@@ -52,7 +52,10 @@ class FrontendUserNotificationController extends AbstractFrontendModuleControlle
     {
         $user = $this->security->getUser();
         $template->set('id', $model->id);
-        $template->set('user', MemberModel::findById($user->id)->row());
+
+        // Do not pass the whole member record (e.g. the password hash) to the template
+        $member = $this->getContaoAdapter(MemberModel::class)->findById($user->id);
+        $template->set('user', null === $member ? [] : array_intersect_key($member->row(), array_flip(['id', 'firstname', 'lastname', 'username', 'email'])));
 
         return $template->getResponse();
     }

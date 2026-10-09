@@ -28,3 +28,8 @@ new Markocupic\ContaoFrontendUserNotification\Notification\DefaultFrontendUserNo
 
 ### Dependencies
 To use Bootstrap toast for the notifications you have to embed [Bootstrap](https://getbootstrap.com/docs/5.3/components/toasts/) manually.
+
+## Requirements
+
+- Contao 5.3 or later, including Contao 6
+- PHP 8.2 or later

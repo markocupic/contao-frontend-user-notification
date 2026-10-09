@@ -21,9 +21,8 @@ class DeleteOutdatedFrontendUserNotificationEvent extends Event
 {
     private bool $shouldDelete = true;
 
-    public function __construct(
-        private readonly FrontendUserNotificationModel $model,
-    ) {
+    public function __construct(private readonly FrontendUserNotificationModel $model)
+    {
     }
 
     public function getModel(): FrontendUserNotificationModel

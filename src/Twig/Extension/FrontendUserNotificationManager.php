@@ -21,9 +21,8 @@ use Twig\TwigFunction;
 
 class FrontendUserNotificationManager extends AbstractExtension
 {
-    public function __construct(
-        private readonly FrontendUserNotificationFetcher $frontendUserNotificationFetcher,
-    ) {
+    public function __construct(private readonly FrontendUserNotificationFetcher $frontendUserNotificationFetcher)
+    {
     }
 
     public function getFunctions(): array

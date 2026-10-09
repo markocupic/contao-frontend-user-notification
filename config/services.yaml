@@ -4,9 +4,13 @@ services:
         autowire: true
         autoconfigure: true
         public: false
-        bind:
 
     Markocupic\ContaoFrontendUserNotification\:
         resource: ../src/
-        exclude: ../src/{DependencyInjection,Model,Notification}
-
+        exclude:
+            - ../src/ContaoManager/
+            - ../src/DependencyInjection/
+            - ../src/Event/
+            - ../src/Model/
+            - ../src/Notification/
+            - ../src/MarkocupicContaoFrontendUserNotification.php

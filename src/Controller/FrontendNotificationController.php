@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Markocupic\ContaoFrontendUserNotification\Controller;
 
 use Contao\Config;
+use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\Date;
 use Contao\FrontendUser;
 use Contao\StringUtil;
@@ -31,6 +32,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class FrontendNotificationController extends AbstractController
 {
     public function __construct(
+        private readonly ContaoFramework $framework,
         private readonly Connection $connection,
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly Security $security,
@@ -86,7 +88,7 @@ class FrontendNotificationController extends AbstractController
         return $this->json($json);
     }
 
-    #[Route('/_frontend_user_notification/tag_as_read/{id}', name: self::class.'_TAG_AS_READ', defaults: ['_scope' => 'frontend', '_token_check' => false])]
+    #[Route('/_frontend_user_notification/tag_as_read/{id}', name: self::class.'_TAG_AS_READ', requirements: ['id' => '\d+'], defaults: ['_scope' => 'frontend', '_token_check' => true], methods: ['POST'])]
     public function tagAsRead(Request $request, int $id): JsonResponse
     {
         $user = $this->security->getUser();
@@ -95,9 +97,10 @@ class FrontendNotificationController extends AbstractController
             return $this->json(['status' => 'not_logged_in']);
         }
 
-        $model = FrontendUserNotificationModel::findById($id);
+        $model = $this->framework->getAdapter(FrontendUserNotificationModel::class)->findById($id);
 
-        if (null !== $model && !$model->isRead) {
+        // Users may only tag their own notifications as read
+        if (null !== $model && (int) $model->user === (int) $user->id && !$model->isRead) {
             $model->isRead = true;
             $model->isReadTstamp = time();
             $model->tstamp = time();
