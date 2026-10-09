@@ -19,9 +19,8 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class TagNotificationAsReadEvent extends Event
 {
-    public function __construct(
-        private readonly FrontendUserNotificationModel $model,
-    ) {
+    public function __construct(private readonly FrontendUserNotificationModel $model)
+    {
     }
 
     public function getModel(): FrontendUserNotificationModel

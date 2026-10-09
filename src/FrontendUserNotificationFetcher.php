@@ -56,9 +56,8 @@ class FrontendUserNotificationFetcher
     }
 
     /**
-     * Finds the unread notifications of the logged in frontend user, that have
-     * not expired yet (an "endOfLifeTstamp" of 0 means that the notification
-     * never expires).
+     * Finds the unread notifications of the logged in frontend user, that have not expired
+     * yet (an "endOfLifeTstamp" of 0 means that the notification never expires).
      */
     private function findUnreadNotifications(string $type): Collection|null
     {
