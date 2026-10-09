@@ -88,7 +88,7 @@ class FrontendNotificationController extends AbstractController
         return $this->json($json);
     }
 
-    #[Route('/_frontend_user_notification/tag_as_read/{id}', name: self::class.'_TAG_AS_READ', defaults: ['_scope' => 'frontend', '_token_check' => false])]
+    #[Route('/_frontend_user_notification/tag_as_read/{id}', name: self::class.'_TAG_AS_READ', requirements: ['id' => '\d+'], defaults: ['_scope' => 'frontend', '_token_check' => true], methods: ['POST'])]
     public function tagAsRead(Request $request, int $id): JsonResponse
     {
         $user = $this->security->getUser();

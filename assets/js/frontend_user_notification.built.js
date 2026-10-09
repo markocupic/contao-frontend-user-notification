@@ -57,7 +57,16 @@ for (const module of modules) {
                     }
                 },
                 tagAsRead: async function readIt(id) {
-                    await fetch(`_frontend_user_notification/tag_as_read/${id}`);
+                    // POST request with the Contao request token (CSRF protection)
+                    const body = new FormData();
+                    body.append('REQUEST_TOKEN', module.dataset.requestToken ?? '');
+
+                    await fetch(`_frontend_user_notification/tag_as_read/${id}`, {
+                        method: 'POST',
+                        body: body,
+                        headers: {'X-Requested-With': 'XMLHttpRequest'},
+                    });
+
                     await this.loadItems();
                 }
             }
