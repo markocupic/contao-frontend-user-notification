@@ -19,9 +19,8 @@ use Contao\CoreBundle\Security\Authentication\Token\TokenChecker;
 use Contao\MemberModel;
 use Contao\Model\Collection;
 use Markocupic\ContaoFrontendUserNotification\Model\FrontendUserNotificationModel;
-use Twig\Extension\AbstractExtension;
 
-class FrontendUserNotificationFetcher extends AbstractExtension
+class FrontendUserNotificationFetcher
 {
     public function __construct(
         private readonly ContaoFramework $framework,
@@ -31,67 +30,55 @@ class FrontendUserNotificationFetcher extends AbstractExtension
 
     public function hasFrontendUserNotifications(string $type = ''): bool
     {
-        if (!$this->tokenChecker->hasFrontendUser()) {
-            return false;
-        }
-
-        $user = $this->getLoggedInFrontendUser();
-        $t = 'tl_frontend_user_notification';
-
-        if ('' !== $type) {
-            $arrColumns = ["$t.user=?", "$t.endOfLifeTstamp>?", "$t.type=?", "$t.isRead=?"];
-            $args = [$user->id, time(), $type, 0];
-        } else {
-            $arrColumns = ["$t.user=?", "$t.endOfLifeTstamp>?", "$t.isRead=?"];
-            $args = [$user->id, time(), 0];
-        }
-
-        $adapter = $this->framework->getAdapter(FrontendUserNotificationModel::class);
-
-        $results = $adapter->findBy($arrColumns, $args);
-
-        if (null !== $results) {
-            return true;
-        }
-
-        return false;
+        return null !== $this->findUnreadNotifications($type);
     }
 
     public function getFrontendUserNotifications(string $type = '', bool $autoConfirm = false): Collection|null
     {
-        if (!$this->hasFrontendUserNotifications($type)) {
-            return null;
-        }
-
-        $user = $this->getLoggedInFrontendUser();
-        $t = 'tl_frontend_user_notification';
-
-        if ('' !== $type) {
-            $arrColumns = ["$t.user=?", "$t.endOfLifeTstamp>?", "$t.type=?", "$t.isRead=?"];
-            $args = [$user->id, time(), $type, 0];
-        } else {
-            $arrColumns = ["$t.user=?", "$t.endOfLifeTstamp>?", "$t.isRead=?"];
-            $args = [$user->id, time(), 0];
-        }
-
-        $adapter = $this->framework->getAdapter(FrontendUserNotificationModel::class);
-
-        $results = $adapter->findBy($arrColumns, $args);
+        $results = $this->findUnreadNotifications($type);
 
         if (null === $results) {
             return null;
         }
 
-        while ($results->next()) {
-            if ($autoConfirm) {
-                $results->isRead = 1;
+        if ($autoConfirm) {
+            while ($results->next()) {
+                $results->isRead = true;
+                $results->isReadTstamp = time();
+                $results->tstamp = time();
                 $results->save();
             }
+
+            $results->reset();
         }
 
-        $results->reset();
-
         return $results;
+    }
+
+    /**
+     * Finds the unread notifications of the logged in frontend user, that have
+     * not expired yet (an "endOfLifeTstamp" of 0 means that the notification
+     * never expires).
+     */
+    private function findUnreadNotifications(string $type): Collection|null
+    {
+        $user = $this->getLoggedInFrontendUser();
+
+        if (null === $user) {
+            return null;
+        }
+
+        $t = 'tl_frontend_user_notification';
+
+        $arrColumns = ["$t.user=?", "($t.endOfLifeTstamp=0 OR $t.endOfLifeTstamp>?)", "$t.isRead=?"];
+        $args = [$user->id, time(), 0];
+
+        if ('' !== $type) {
+            $arrColumns[] = "$t.type=?";
+            $args[] = $type;
+        }
+
+        return $this->framework->getAdapter(FrontendUserNotificationModel::class)->findBy($arrColumns, $args);
     }
 
     private function getLoggedInFrontendUser(): MemberModel|null
