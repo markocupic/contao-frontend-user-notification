@@ -1,0 +1,4 @@
+/* Icon (Lucide "bell") for the "notification" back end menu category */
+#tl_navigation .group-notification {
+    background: url("icons/bell.svg") 3px 2px no-repeat;
+}

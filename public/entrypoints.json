@@ -2,7 +2,12 @@
   "entrypoints": {
     "js/frontend_user_notification.built": {
       "js": [
-        "/bundles/markocupiccontaofrontendusernotification/js/frontend_user_notification.built.2af781a4.js"
+        "/bundles/markocupiccontaofrontendusernotification/js/frontend_user_notification.built.15bb3473.js"
+      ]
+    },
+    "backend/backend": {
+      "css": [
+        "/bundles/markocupiccontaofrontendusernotification/backend/backend.ba4a8887.css"
       ]
     }
   }

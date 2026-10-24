@@ -7,6 +7,9 @@ Encore
 
     .addEntry('js/frontend_user_notification.built', './assets/js/frontend_user_notification.built.js')
 
+    // Back end menu icon (the SVG referenced via url() is emitted to public/images/)
+    .addStyleEntry('backend/backend', './assets/backend/backend.css')
+
     // Typescripts
     //.addEntry('js/my_typescript', './assets/ts/my_typescript.ts')
     //.enableTypeScriptLoader()
